@@ -1,14 +1,23 @@
+import { config } from './config.js';
+
 const gameState = {
     players:{},
     fruits: {}
 }
 
-export function addPlayer({ playerId, positionX, positionY }) {
+function generateRandomPositions() {
+    const positionX = Math.floor(Math.random() * config.screenWidth);
+    const positionY = Math.floor(Math.random() * config.screenHeight);
+
+    return { positionX, positionY }
+}
+
+export function addPlayer({ playerId, positions = generateRandomPositions() }) {
     gameState.players[playerId] = {
-        positionX,
-        positionY
+        positionX: positions.positionX,
+        positionY: positions.positionY
     }
-    
+    return positions;
 }
 
 export function removePlayer({ playerId }) {

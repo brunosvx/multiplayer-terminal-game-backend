@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 
-import game from './game.js';
+import { addPlayer } from './game.js';
 
 const io = new Server(3333, {
     cors: {
@@ -9,6 +9,10 @@ const io = new Server(3333, {
 })
 
 io.on('connection', (socket) => {
+    console.log('New socket connected:', socket.id);
 
-    console.log(socket.id);
+    const positions = addPlayer({ playerId: socket.id })
+
+    socket.emit('initialPositions', positions);
+    socket.broadcast.emit('newPlayer', { playerId: socket.id, ...positions });
 })
