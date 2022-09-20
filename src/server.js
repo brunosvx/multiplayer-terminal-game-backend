@@ -1,3 +1,10 @@
+import { Server } from 'socket.io';
+
+const io = new Server(3333, {
+    cors: {
+        origin: '*'
+    }
+})
 
 const gameState = {
     players:{},
@@ -61,3 +68,8 @@ function checkPlayerCollision({ playerId }) {
         })
     }
 }
+
+io.on('connection', (socket) => {
+
+    console.log(socket.id);
+})
