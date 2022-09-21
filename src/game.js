@@ -1,6 +1,6 @@
 import { config } from './config.js';
 
-const gameState = {
+export const gameState = {
     players:{},
     fruits: {}
 }
@@ -31,29 +31,30 @@ function removeFruit({ fruitId }) {
 export function movePlayer({ playerId, move }) {
     const acceptedMoves = {
         down() {
-            if(gameState.players[playerId].positionY + 1 === config.screenHeight) return
+            if(gameState.players[playerId].positionY + 1 === config.screenHeight) return false;
             gameState.players[playerId].positionY++
         },
         up() {
-            if(gameState.players[playerId].positionY === 0) return
+            if(gameState.players[playerId].positionY === 0) return false;
             gameState.players[playerId].positionY--
         },
         left() {
-            if(gameState.players[playerId].positionX === 0) return
+            if(gameState.players[playerId].positionX === 0) return false;
             gameState.players[playerId].positionX--
         },
         right() {
-            if(gameState.players[playerId].positionX + 1 === config.screenWidth) return
+            if(gameState.players[playerId].positionX + 1 === config.screenWidth) return false;
             gameState.players[playerId].positionX++
         },
     }
 
     const moveFunction = acceptedMoves[move];
 
-    if(!moveFunction) return;
+    if(!moveFunction) return false;
 
     moveFunction();
     checkPlayerCollision({ playerId })
+    return true;
 }
 
 
