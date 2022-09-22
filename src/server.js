@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 
 import { addPlayer, movePlayer, gameState, removePlayer } from './game.js';
 console.log('server.js')
-const io = new Server(3333, {
+const io = new Server(process.env.PORT || 3333, {
     cors: {
         origin: '*'
     }
