@@ -1,4 +1,7 @@
+import { v4 as uuid } from 'uuid';
+console.log('game.js');
 import { config } from './config.js';
+import { newFruitGenerated } from './server.js';
 
 export const gameState = {
     players:{},
@@ -11,6 +14,32 @@ function generateRandomPositions() {
 
     return { positionX, positionY }
 }
+
+function addFruit({ fruitId, positionX, positionY }) {
+    gameState.fruits[fruitId] = {
+        positionX,
+        positionY
+    }
+}
+
+
+function generateFruits({ interval, max }) {
+    if(Object.keys(gameState.fruits).length >= max) return setTimeout(() => generateFruits({ interval, max }), interval);
+    if(!Object.keys(gameState.players).length) return setTimeout(() => generateFruits({ interval, max }), interval);
+
+    const fruitPositions = generateRandomPositions();
+    const fruitId = uuid()
+
+    addFruit({
+        fruitId,
+        ...fruitPositions
+    })
+
+    newFruitGenerated({ fruitId, ...fruitPositions });
+    setTimeout(() => generateFruits({ interval, max }), interval);
+}
+
+generateFruits({ interval: 2000, max: 5 });
 
 export function addPlayer({ playerId, positions = generateRandomPositions() }) {
     gameState.players[playerId] = {
