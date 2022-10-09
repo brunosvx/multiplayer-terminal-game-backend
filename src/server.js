@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 
 import { addPlayer, movePlayer, gameState, removePlayer } from './game.js';
-console.log('server.js')
+
 const io = new Server(process.env.PORT || 3333, {
     cors: {
         origin: '*'
@@ -40,5 +40,11 @@ io.on('connection', (socket) => {
 export function newFruitGenerated({ fruitId, positionX, positionY }) {
 
     io.emit('newFruit', { fruitId, positionX, positionY });
+
+}
+
+export function emitPlayerPoints({ playerId, points }) {
+
+    io.emit('playerPoints', { playerId, points });
 
 }

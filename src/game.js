@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
-console.log('game.js');
+
 import { config } from './config.js';
-import { newFruitGenerated } from './server.js';
+import { emitPlayerPoints, newFruitGenerated } from './server.js';
 
 export const gameState = {
     players:{},
@@ -44,7 +44,8 @@ generateFruits({ interval: 2000, max: 5 });
 export function addPlayer({ playerId, positions = generateRandomPositions() }) {
     gameState.players[playerId] = {
         positionX: positions.positionX,
-        positionY: positions.positionY
+        positionY: positions.positionY,
+        points: 0
     }
     return positions;
 }
@@ -96,6 +97,12 @@ function checkPlayerCollision({ playerId }) {
 
         removeFruit({
             fruitId
+        });
+
+        player.points++
+        emitPlayerPoints({
+            playerId,
+            points: player.points
         })
     }
 }
